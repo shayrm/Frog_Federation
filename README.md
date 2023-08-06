@@ -61,7 +61,7 @@ These types of repositories are based on bidirectional replication, whereby arti
 
 As displayed below, setting up mirroring across two sites using Federated repositories inherently support mirroring removing the need to create the mesh topology.
 
-![Federated Topology](https://jfrog.com/help/api/khub/maps/TFrtp_Jcpcw1vmlHZ63Gmw/resources/lMifj_o7aKmuFVNxkUEHAA/content?Ft-Calling-App=ft%2Fturnkey-portal&Ft-Calling-App-Version=4.1.38&filename=uuid-f6a9d1d4-090a-b735-de7a-d6983394f23a.png)
+![Federated Topology](./images/federation_topology.png)
 
 ## Target Audience
 Individuals involved in IT development, IT operations, or IT service management. Individuals whose role are touched by DevOps and Continuous Delivery, such as the following IT roles: DevOps engineers. Product owners.
