@@ -68,9 +68,9 @@ Individuals involved in IT development, IT operations, or IT service management.
 
 Good understanding of:
 
-:frog: JFrog Artifactory
-:frog: Networking
-:frog: Kubernetes
+:frog: JFrog Artifactory  
+:frog: Networking  
+:frog: Kubernetes  
 
 ## Assumptions 
 Before starting the PoC the following assumptions are considered:
