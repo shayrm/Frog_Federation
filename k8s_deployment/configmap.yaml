@@ -4,10 +4,10 @@ metadata:
   name: env-config
   namespace: jfrog-integration
 data:
-  INSTANCE_1: "shaydemotest1.jfrog.io"
-  INSTANCE_2: "shaydemotest2.jfrog.io"
-  REPO_1: "artifactory/shay-demo-1-west-1"
-  REPO_2: "artifactory/shay-demo-2-east-1"
+  INSTANCE_1: "<update demotest1>.jfrog.io"
+  INSTANCE_2: "<update demotest2>.jfrog.io"
+  REPO_1: "artifactory/<repository 1 directory>"
+  REPO_2: "artifactory/<repository 2 director>"
   PROXY: "nginx-service.jfrog-integration"
   APP_PATH: "/opt/app/demo/"
 ---
