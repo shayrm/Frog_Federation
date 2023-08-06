@@ -127,7 +127,7 @@ This section covers the actions required to create Artifactory instances and fed
 
 1) clone the repository to the k8s cluster environment.
    ```bash
-   git clone <git repo>
+   git clone https://github.com/shayrm/Frog_Federation.git
    ```
 2) cd to the repo directory and into the k8s deployment scripts 
    ```bash
