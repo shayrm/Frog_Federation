@@ -7,9 +7,9 @@ The aim of this Proof of Concept (POC) is to demonstrate Federated repositories 
 
 In the PoC following concepts will be covered:
 
-:frog: Setup Active-Active repository of JFrog Artifactory cloud with a single URL.
-:frog: Upload a binary file to federated repository and confirm file distribution to all repositories.
-:frog: Download a binary file from Artifactory through a single URL 
+:frog: Setup Active-Active repository of JFrog Artifactory cloud with a single URL.  
+:frog: Upload a binary file to federated repository and confirm file distribution to all repositories.  
+:frog: Download a binary file from Artifactory through a single URL.   
 
 A single URL access is implemented by using a reverse proxy (Nginx) to proxy more than one instance
 of Artifactory.
