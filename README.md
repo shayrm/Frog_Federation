@@ -26,6 +26,7 @@ of Artifactory.
     - [Creating two JFrog cloud trial instances](#creating-two-jfrog-cloud-trial-instances)
     - [Deploy K8S environment](#deploy-k8s-environment)
     - [Upload and Download from Federated repository](#upload-and-download-from-federated-repository)
+  - [Summary](#Summary)
 
 
 ## Why do I need a Federated Repositories?
