@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-reverse-proxy
+  namespace: jfrog-integration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-reverse-proxy
+  template:
+    metadata:
+      labels:
+        app: nginx-reverse-proxy
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          command: ["/bin/bash"]
+          args: 
+            - "-c"
+            - >
+              envsubst < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf && 
+              nginx -g 'daemon off;'
+          envFrom:
+            - configMapRef:
+                name: env-config
+            - configMapRef:
+                name: nginx-config
+          volumeMounts:
+            - name: nginx-conf-volume
+              #mountPath: /etc/nginx/nginx.conf
+              mountPath: /etc/nginx/templates/nginx.conf.template
+              subPath: nginx.conf
+      volumes:
+        - name: nginx-conf-volume
+          configMap:
+            name: nginx-config
+            items:
+              - key: nginx.conf
+                path: nginx.conf

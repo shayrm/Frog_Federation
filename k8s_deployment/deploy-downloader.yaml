@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: downloader-app
+  namespace: jfrog-integration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: downloader-app
+  template:
+    metadata:
+      labels:
+        app: downloader-app
+    spec:
+      containers:
+        - name: downloader-app-pod-1
+          image: alpine:latest
+          command: ["/bin/sh"]
+          args: 
+            - "-c"
+            - >
+              apk add --no-cache curl &&
+              sleep infinity
+          env:
+            - name: FUSER
+              valueFrom:
+                secretKeyRef: 
+                  name: demo-secret 
+                  key: username
+            - name: FPASS
+              valueFrom:
+                secretKeyRef: 
+                  name: demo-secret 
+                  key: password 
+          envFrom:
+            - configMapRef:
+                name: env-config
+            - configMapRef:
+                name: script-config                                    
+          volumeMounts:
+            - name: scripts-volume
+              mountPath: /opt/app/demo              
+      volumes:
+        - name: scripts-volume
+          configMap:
+            name: script-config
+            defaultMode: 0744
+            items:
+              - key: check_uploader_to_repo.sh
+                path: check_uploader_to_repo.sh
+              - key: download_file_from_repo.sh
+                path: download_file_from_repo.sh
+  

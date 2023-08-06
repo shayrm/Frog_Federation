@@ -1,0 +1,135 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+  namespace: jfrog-integration
+data:
+  INSTANCE_1: "shaydemotest1.jfrog.io"
+  INSTANCE_2: "shaydemotest2.jfrog.io"
+  REPO_1: "artifactory/shay-demo-1-west-1"
+  REPO_2: "artifactory/shay-demo-2-east-1"
+  PROXY: "nginx-service.jfrog-integration"
+  APP_PATH: "/opt/app/demo/"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: jfrog-integration
+data:
+  nginx.conf: |
+    worker_processes 1;
+    events { worker_connections 1024; }
+    http {
+      client_max_body_size 200M;
+      upstream backend {
+        server ${INSTANCE_1}:443;
+        server ${INSTANCE_2}:443;
+      }
+      server {
+        listen 80;
+        client_max_body_size 200M;
+        error_log /var/log/nginx/proxy-error.log debug;
+        location /repo {
+          proxy_pass https://backend;           
+        }
+        location /repo1 {
+          proxy_pass https://${INSTANCE_1}/${REPO_1};
+        }
+        location /repo2 {
+          proxy_pass https://${INSTANCE_2}/${REPO_2};
+        }
+      }
+    }
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: script-config
+  namespace: jfrog-integration
+data:  
+  create_bin_file.sh: |
+
+    #!/bin/sh
+
+    cd $APP_PATH
+
+    # generate random string for file extention
+    FILE_EXT=$(echo $RANDOM | md5sum | head -c 6; echo;)
+    export FILE_NAME=data_file_$FILE_EXT.tar.gz
+
+    # create bin file file random content
+    dd bs=1024 count=10240 status=none < /dev/urandom > /tmp/$FILE_NAME
+
+    echo $FILE_NAME > /tmp/last_file_created.txt
+  
+  uploader_to_repo.sh: |
+    #!/bin/sh
+    cd $APP_PATH
+
+    # Check if data file exist
+    FILE=/tmp/last_file_created.txt
+
+    if [[ -f $FILE ]];
+    then
+            echo "Found data file";           
+    else
+            echo "no data file...creating one"
+            ./create_bin_file.sh
+    fi
+
+    # uploading file to repo 1 and 2
+    export DATA_FILE_NAME=$(cat /tmp/last_file_created.txt)
+
+    for j in repo1 repo2
+    do
+      echo "uploading $DATA_FILE_NAME to $j JFrog artifact via proxy..."
+      curl -s -u $FUSER:$FPASS -X PUT "http://$PROXY/$j/$DATA_FILE_NAME" -T /tmp/$DATA_FILE_NAME
+      echo -e "\n=================================================================="
+      sleep 4
+      echo "Check file status on $j:"
+      echo -e "===============================\n"
+      curl -s -u $FUSER:$FPASS -X GET "http://$PROXY/$j/" | grep $DATA_FILE_NAME
+      echo -e "\n===================================================================\n"
+    done
+  
+  check_uploader_to_repo.sh: |
+    #!/bin/sh
+
+    cd $APP_PATH
+    # Check if data file exist
+    FILE=/tmp/last_file_created.txt
+
+    if [[ -f $FILE ]];
+    then
+            echo "data file exist...";
+    	      export DATA_FILE_NAME=$(cat /tmp/last_file_created.txt)
+    else
+            echo "no data file...run uploader first, exit now"
+            exit
+    fi
+    
+    for j in repo1 repo2
+    do
+      echo "check for data file: $DATA_FILE_NAME in instance $j"
+      curl -s -u $FUSER:$FPASS -X GET "http://$PROXY/$j/" | grep $DATA_FILE_NAME
+    done
+
+  download_file_from_repo.sh: |
+    #!/bin/sh
+
+    cd $APP_PATH
+
+    echo "Repo $INSTANCE_1/$REPO_1 includes the following files:"
+    curl -s -u $FUSER:$FPASS -X GET "http://$PROXY/repo1/" | grep -o '"data_file_[^"]*"'
+    echo -e "\n ---- Which file to download ? ------"
+    read DATA_FILE_NAME
+
+    echo "Downloading data file $DATA_FILE_NAME to /tmp dir"
+    curl -s -u $FUSER:$FPASS -X GET "http://$PROXY/repo1/$DATA_FILE_NAME" --output /tmp/$DATA_FILE_NAME -L
+
+    echo "check downloaded file:"
+    ls -lah /tmp/$DATA_FILE_NAME
+

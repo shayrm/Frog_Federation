@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uploader-app
+  namespace: jfrog-integration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uploader-app
+  template:
+    metadata:
+      labels:
+        app: uploader-app
+    spec:
+      containers:
+        - name: uploader-app-pod-1
+          image: alpine:latest
+          command: ["/bin/sh"]
+          args: 
+            - "-c"
+            - >
+              apk add --no-cache curl &&
+              sleep infinity
+          env:
+            - name: FUSER
+              valueFrom:
+                secretKeyRef: 
+                  name: demo-secret 
+                  key: username
+            - name: FPASS
+              valueFrom:
+                secretKeyRef: 
+                  name: demo-secret 
+                  key: password 
+          envFrom:
+            - configMapRef:
+                name: env-config
+            - configMapRef:
+                name: script-config                                    
+          volumeMounts:
+            - name: scripts-volume
+              mountPath: /opt/app/demo              
+      volumes:
+        - name: scripts-volume
+          configMap:
+            name: script-config
+            defaultMode: 0744
+            items:
+              - key: create_bin_file.sh
+                path: create_bin_file.sh
+              - key: uploader_to_repo.sh
+                path: uploader_to_repo.sh
+              - key: check_uploader_to_repo.sh
+                path: check_uploader_to_repo.sh
+              
+  
