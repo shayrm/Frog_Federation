@@ -83,20 +83,22 @@ Before starting the PoC the following assumptions are considered:
 
 Summary of the activities covered in this PoC:
 
-1. Deploy **two JFrog cloud trial instances** (use https://jfrog.com/start-free/ )
-   a) demotest1.jfrog.io
-   b) demotest2.jfrog.io
+1. Deploy **two JFrog cloud trial instances** (use https://jfrog.com/start-free/ )  
+ 
+   a) demotest1.jfrog.io  
+   b) demotest2.jfrog.io  
 
    (Alternative option is to use existing enterprise accounts)
-2. Create the same repository in both instances.
-3. Create the same user in both instances.
-4. Setup repository federation between the two instances.
-5. On a local or remote kubernetes cluster Deploy a reverse proxy configure it to proxy the two Artifactory instances.
-7. Deploy an **uploader pod** that will: 
-  a) Generates a random binary file and uploads it to Artifactory through a single URL. 
-     (a single URL that will balance between the two Artifactory cloud instances)
-  b) After uploading the file, a test that will check for the file's existence in both cloud instances
-8. Deploy a **Downloader pod* that will get a binary from Artifactory through a single URL.
+3. Create the same repository in both instances.
+4. Create the same user in both instances.
+5. Setup repository federation between the two instances.
+6. On a local or remote kubernetes cluster Deploy a reverse proxy configure it to proxy the two Artifactory instances.
+7. Deploy an **uploader pod** that will:  
+
+   * Generates a random binary file and uploads it to Artifactory through a single URL. 
+     (a single URL that will balance between the two Artifactory cloud instances)  
+   * After uploading the file, a test that will check for the file's existence in both cloud instances.  
+8. Deploy a **Downloader pod** that will get a binary from Artifactory through a single URL.
 
 ## PoC installation
 
@@ -115,11 +117,11 @@ This section covers the actions required to create Artifactory instances and fed
 
   :bell: **Note** Repository sync and mirroring is not applicable on trail account.
 
-  At the end of this stage you should have the following information available:
+  At the end of this stage you should have the following information available:  
 
-  :frog: Username and Password
-  :frog: JFrog cloud instances URL (e.g demotest1.jfrog.io and demotest2.jfrog.io)
-  :frog: Federation repository URL (e.g demotest1.jfrog.io/artifactory/demo-1-west-1 and demotest2.jfrog.io/artifactory/demo-2-east-1)
+  :frog: Username and Password  
+  :frog: JFrog cloud instances URL (e.g demotest1.jfrog.io and demotest2.jfrog.io)  
+  :frog: Federation repository URL (e.g demotest1.jfrog.io/artifactory/demo-1-west-1 and demotest2.jfrog.io/artifactory/demo-2-east-1)  
 
 ### Deploy K8S environment
 
@@ -206,9 +208,9 @@ This section covers the actions required to create Artifactory instances and fed
    At this point the setup is ready to continue and test the federation repository.
 
 ### Upload and Download from Federated repository 
-The k8s deployment includes to pods:
-:frog: uploader-app
-:frog: downloader-app
+The k8s deployment includes to pods:  
+:frog: uploader-app  
+:frog: downloader-app  
 
 In each there are built-in scripts that use the Nginx pod as a revere proxy to loadbalance the request to the two repositories.  
 In that way the user could test the Active-Active setup. Uploading the file to any of the repository will mirror the file to the other one.
@@ -237,6 +239,9 @@ In that way the user could test the Active-Active setup. Uploading the file to a
 
    ![Downloader output](images/downloader_output.png)
 
+## Summary
+With this PoC we were able to demonstrate how JFrog Artifactory with federation repository setup can provide a High availability solution.
+Which provide protection and reduce risk of loosing one repository. In addtion a constent backup in seperate location of the organization resource, code and artifaces.
 
 
 
