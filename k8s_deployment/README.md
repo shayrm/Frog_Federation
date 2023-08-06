@@ -26,7 +26,7 @@ of Artifactory.
     - [Creating two JFrog cloud trial instances](#creating-two-jfrog-cloud-trial-instances)
     - [Deploy K8S environment](#deploy-k8s-environment)
     - [Upload and Download from Federated repository](#upload-and-download-from-federated-repository)
-
+  - [Summary](#Summary)
 
 ## Why do I need a Federated Repositories?
 
@@ -237,6 +237,10 @@ In that way the user could test the Active-Active setup. Uploading the file to a
 
    ![Downloader output](images/downloader_output.png)
 
+
+## Summary
+With this PoC we were able to demonstrate how JFrog Artifactory with federation repository setup can provide a High availability solution.
+Which provide protection and reduce risk of loosing one repository. In addtion a constent backup in seperate location of the organization resource, code and artifaces.  
 
 
 
