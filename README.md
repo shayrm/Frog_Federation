@@ -243,7 +243,8 @@ In that way the user could test the Active-Active setup. Uploading the file to a
 ## Summary
 With this PoC we were able to demonstrate how JFrog Artifactory with federation repository setup can provide a High availability solution.
 Which provide protection and reduce risk of loosing one repository. 
-In addtion a constent backup in seperate location of the organization resource, code and artifaces.  
+In addtion a constent backup in seperate location of the organization resource, code and artifaces.
+PLease submit a call to support if needed.
 
 
 
