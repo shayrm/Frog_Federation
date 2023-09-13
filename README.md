@@ -1,7 +1,7 @@
+# JFrog Federation PoC - High Availability Repository
+
 
 ![The Frog](https://speedmedia.jfrog.com/08612fe1-9391-4cf3-ac1a-6dd49c36b276/https://media.jfrog.com/wp-content/uploads/2021/12/29113553/jfrog-logo-2022.svg 'Always Jump Forward!')
-
-# JFrog Federation PoC - High Availability Repository
 
 The aim of this Proof of Concept (POC) is to demonstrate Federated repositories as part of JFrog Artifactory solution.
 
@@ -9,7 +9,7 @@ In the PoC following concepts will be covered:
 
 :frog: Setup Active-Active repository of JFrog Artifactory cloud with a single URL.  
 :frog: Upload a binary file to federated repository and confirm file distribution to all repositories.  
-:frog: Download a binary file from Artifactory through a single URL.   
+:frog: Download a binary file from Artifactory through a single URL.  
 
 A single URL access is implemented by using a reverse proxy (Nginx) to proxy more than one instance
 of Artifactory.
