@@ -130,7 +130,7 @@ This section covers the actions required to create Artifactory instances and fed
    ```bash
    git clone https://github.com/shayrm/Frog_Federation.git
    ```
-2) cd to the repo directory and into the k8s deployment scripts 
+2) cd to the repository directory and into the k8s deployment scripts 
    ```bash
    cd <fgrog-demo>/k8s_deployment
    ```
